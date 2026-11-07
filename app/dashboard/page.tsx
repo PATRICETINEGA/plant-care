@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import AddPlant from '@/components/AddPlant'
+import DeletePlantButton from '@/components/DeletePlantButton'
 export default async function Dash() {
   const s = await getSession()
   if (!s) redirect('/login')
@@ -17,11 +18,14 @@ export default async function Dash() {
       <AddPlant />
       <div className="space-y-2">
         {plants.map((p: any) => (
-          <div key={p.id} className="bg-white p-3 rounded shadow text-sm">
-            <p className="font-medium">{p.name}</p>
-            {p.species && <p className="text-gray-500 text-xs">{p.species}</p>}
-            {p.lastWatered && <p className="text-xs text-gray-400 mt-1">Last watered: {p.lastWatered}</p>}
-            {p.notes && <p className="text-xs text-gray-400 mt-1">{p.notes}</p>}
+          <div key={p.id} className="bg-white p-3 rounded shadow flex justify-between items-start text-sm">
+            <div>
+              <p className="font-medium">{p.name}</p>
+              {p.species && <p className="text-gray-500 text-xs">{p.species}</p>}
+              {p.lastWatered && <p className="text-xs text-gray-400 mt-1">Last watered: {p.lastWatered}</p>}
+              {p.notes && <p className="text-xs text-gray-400 mt-1">{p.notes}</p>}
+            </div>
+            <DeletePlantButton id={p.id} />
           </div>
         ))}
         {plants.length === 0 && <p className="text-gray-500">No plants yet</p>}
